@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:core';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -8,8 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-  int counter = 1;
 
   @override
   void initState() { //init state is used when we have to parse data to different screen or through an api
@@ -34,19 +36,51 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+    Map? info = ModalRoute.of(context)?.settings.arguments as Map?;
+
+    var cityName = ["New Delhi", "Mumbai", "Chennai", "Kolkata"];
+    final _random = new Random();
+    var city = cityName[_random.nextInt(cityName.length)];
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home Activity"),
-      ),
-      body: Column(children: <Widget>[
-        FloatingActionButton(
-          onPressed: () => setState(() {
-            counter += 1;
-          }),
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Container(  //search
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(40)
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        print("Search me");
+                      },
+                        child: Container(
+                            child: Icon(Icons.search),
+                          margin: EdgeInsets.fromLTRB(2, 0, 5, 0),
+                        ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search $city"
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-        Text("$counter")
-      ]
-    ),
+      ),
     );
   }
 }
