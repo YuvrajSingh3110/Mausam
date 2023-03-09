@@ -15,9 +15,11 @@ class _LoadingState extends State<Loading> {
   late String windSpeed;
   late String desc;
   late String main;
+  late String icon;
+  late String location = "Haridwar";
 
-  void startApp() async {
-    worker instance = worker(location: "Mumbai");
+  void startApp(String city) async {
+    worker instance = worker(location: city);
     await instance.getData();
 
     temp = instance.temp;
@@ -25,6 +27,7 @@ class _LoadingState extends State<Loading> {
     windSpeed = instance.windSpeed;
     desc = instance.description;
     main = instance.main;
+    icon = instance.icon;
 
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacementNamed(
@@ -36,62 +39,74 @@ class _LoadingState extends State<Loading> {
             "hum_val": humidity,
             "wind_val": windSpeed,
             "desc_val": desc,
-            "main_val": main
+            "main_val": main,
+            "icon_val": icon,
+            "city_val": location
           });
     });
   }
 
   @override
   void initState() {
-    startApp();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    Map? search = ModalRoute.of(context)?.settings.arguments as Map?;
+    if(search?.isNotEmpty ?? false){  //if search is null it will return false
+      location = search!['searchText'];
+    }
+    startApp(location);
+
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 60,
-              ),
-              Image.asset(
-                "images/weather.png",
-                height: 150,
-                width: 150,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Text(
-                "Mausam App",
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const Text(
-                "Made by Yuvraj",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              const SpinKitDoubleBounce(
-                color: Colors.white,
-                size: 50.0,
-              )
-            ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 150,
+                ),
+                Image.asset(
+                  "images/weather.png",
+                  height: 150,
+                  width: 150,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text(
+                  "Mausam App",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const Text(
+                  "Made by Yuvraj",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                const SpinKitDoubleBounce(
+                  color: Colors.white,
+                  size: 50.0,
+                )
+              ],
+            ),
           ),
         ),
       ),
       backgroundColor: Colors.blue[200],
+
     );
   }
 }
