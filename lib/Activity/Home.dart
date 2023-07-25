@@ -1,7 +1,6 @@
 import 'dart:core';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:weather_icons/weather_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
